@@ -1,4 +1,5 @@
 const generateJWT = require("../helpers/generateJWT")
+const { areWeInProduction } = require("../utils/config")
 
 const refreshToken = (req, res) => {
   const user = req.user
@@ -163,7 +164,7 @@ const localCallback = async (req, res) => {
 
   let token = generateJWT({ user })
 
-  res.cookie("jwt", token, { secure: false, sameSite: "None" })
+  res.cookie("jwt", token, { secure: areWeInProduction, sameSite: "None" })
 
   res.status(200).json({ ok: true, data: token })
 }
