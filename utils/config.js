@@ -15,7 +15,7 @@ module.exports = {
       ? "https://cyl-back.azurewebsites.net"
       : "http://localhost:4000",
   jwtSecretKey: process.env.JWT_SECRET_KEY,
-  areWeInProduction: process.env.CUSTOM_ENV !== "development",
+  areWeInProduction: process.env.CUSTOM_ENV === "production",
   tokenExpiration: 1 * 60 * 60 * 24 * 30 * 12, // Está expresado en segundos
   //                  1min  1h   1d  1mes  12meses
 }

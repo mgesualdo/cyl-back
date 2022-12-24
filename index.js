@@ -4,6 +4,7 @@ const passport = require("passport")
 const { localCallback } = require("./controllers/auth")
 const connectToDB = require("./db/index")
 const cors = require("cors")
+const { areWeInProduction } = require("./utils/config")
 require("./middlewares/passport")
 
 const app = express()
@@ -30,7 +31,9 @@ app.use(
   })
 )
 app.use(passport.initialize())
-app.use(passport.session({ cookie: { sameSite: "None" } }))
+app.use(
+  passport.session({ cookie: { sameSite: "None", secure: areWeInProduction } })
+)
 
 app.get("/health-check", (_, res) => {
   res.status(200).send("I'm alive, don't replace me! 🙏")
