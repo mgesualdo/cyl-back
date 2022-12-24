@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken")
 const { tokenExpiration, jwtSecretKey } = require("../utils/config")
 
 const generateJWT = ({ user }) => {
-  console.log({ jwtSecretKey })
   const token = jwt.sign(
     {
       sub: user._id,
