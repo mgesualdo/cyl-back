@@ -158,7 +158,7 @@ const codeGenerator = async (req, res) => {
 const localCallback = async (req, res) => {
   // If this function gets called, authentication was successful.
   // `req.user` contains the authenticated user.
-  console.log("LOCAL CALLBACK")
+  console.log("LOCAL CALLBACK!")
   const user = req.user
 
   let token = generateJWT({ user })
