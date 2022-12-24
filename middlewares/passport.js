@@ -17,7 +17,6 @@ const cookieExtractor = (req) => {
 }
 
 // Estrategia de JWT
-console.log({ jwtSecretKey })
 passport.use(
   new JwtStrategy(
     {
