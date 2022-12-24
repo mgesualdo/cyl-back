@@ -35,7 +35,7 @@ app.use(
   })
 )
 app.use(passport.initialize())
-app.use(passport.session())
+// app.use(passport.session())
 
 app.get("/health-check", (_, res) => {
   res.status(200).send("I'm alive, don't replace me! 🙏")
@@ -47,7 +47,7 @@ app.get("/", passport.authenticate("jwt"), (req, res) => {
 
 app.post(
   "/login",
-  passport.authenticate("local", { session: true }),
+  passport.authenticate("local", { session: false }),
   localCallback
 )
 
