@@ -30,7 +30,7 @@ app.use(
   })
 )
 app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.session({ cookie: { sameSite: "None" } }))
 
 app.get("/health-check", (_, res) => {
   res.status(200).send("I'm alive, don't replace me! 🙏")
