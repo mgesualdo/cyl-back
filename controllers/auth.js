@@ -164,7 +164,10 @@ const localCallback = async (req, res) => {
 
   let token = generateJWT({ user })
 
-  res.cookie("jwt", token, { secure: areWeInProduction, sameSite: "None" })
+  res.cookie("jwt", token, {
+    secure: areWeInProduction,
+    sameSite: areWeInProduction ? "None" : "strict",
+  })
 
   res.status(200).json({ ok: true, data: token })
 }
