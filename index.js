@@ -32,7 +32,12 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(
-  passport.session({ cookie: { sameSite: "None", secure: areWeInProduction } })
+  passport.session({
+    secret: "wonderfulsecrreeeettt",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { sameSite: "None", secure: areWeInProduction },
+  })
 )
 
 app.get("/health-check", (_, res) => {
