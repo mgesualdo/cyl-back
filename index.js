@@ -23,6 +23,9 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.get("/health-check", (_, res) => {
+  res.status(200).send("I'm alive, don't replace me! 🙏")
+})
 app.get("/", passport.authenticate("jwt"), (req, res) => {
   console.log("LLEGA ACA")
   res.status(200).send("Nuestra app ya está en producción")
