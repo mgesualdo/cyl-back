@@ -13,7 +13,7 @@ connectToDB()
 app.use(express.json())
 app.use(
   cors({
-    origin: ["https://cyl-back.azurewebsites.net", "http://localhost:3000"],
+    origin: ["https://cyl-front-three.vercel.app", "http://localhost:3000"],
     credentials: true,
   })
 )
