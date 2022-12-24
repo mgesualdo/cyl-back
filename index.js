@@ -13,7 +13,11 @@ connectToDB()
 app.use(express.json())
 app.use(
   cors({
-    origin: ["https://cyl-front-three.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://cyl-front-three.vercel.app",
+      "https://cyl-front-git-dev-mgesualdo.vercel.app/",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 )
