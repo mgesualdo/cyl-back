@@ -2,7 +2,7 @@
   "name": "CYL",
   "version": "1.0.0",
   "main": "index.js",
-  "author": "Martín Gesualdo <mgesudev@gmail.com>",
+  "author": "Martín Gesualdo <mgesualdo@equip-arte.com>",
   "license": "MIT",
   "scripts": {
     "dev": "nodemon index.js",
