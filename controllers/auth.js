@@ -1,28 +1,8 @@
 const generateJWT = require("../helpers/generateJWT")
 const { areWeInProduction } = require("../utils/config")
+const Person = require("../models/person")
+const sendEmail = require("../helpers/mailer")
 
-const refreshToken = (req, res) => {
-  const user = req.user
-
-  let token = generateJWT({ user })
-
-  res.status(200).json({ ok: true, data: token })
-}
-
-const codeVerification = async (req, res) => {
-  const { code } = req.params
-  const { email } = req.body
-
-  const validCode = await User.exists({ email, loginCode: code })
-
-  if (validCode) {
-    res.status(200).json({ ok: true })
-  } else {
-    res
-      .status(200)
-      .json({ ok: false, message: "El código ingresado no es válido." })
-  }
-}
 const codeGenerator = async (req, res) => {
   const { email } = req.params
 
@@ -48,49 +28,19 @@ const codeGenerator = async (req, res) => {
       randomCode = randomCode + numbers[numberIndex]
     })
 
-  const user = await User.findOne({ email: emailLower })
+  const person = await Person.findOne({ email: emailLower })
 
-  if (!user) {
-    const createdUser = await User.create({
-      firstname: "",
-      lastname: "",
-      fullname: "",
-      email: emailLower,
-      emailVerified: false,
-      hasEverLoggedIn: false,
-      loginCode: randomCode,
-    })
-
-    // Hacemos que arranque con una "no-user-image.png", sobre todo para poder inicializar bien su wallet
-    const { data: userImageBuffer } = await axios({
-      method: "GET",
-      url: `${config.blobsBaseUrl}/wallets/user-no-image.png`,
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-      // Sino terminaba devolviendo como string codificado en UTF8 y fallaba
-      // https://stackoverflow.com/questions/66807052/utf-8-encoded-string-to-buffer-node-js
-      responseType: "arraybuffer",
-    })
-
-    console.log({ userImageBuffer })
-
-    const blobName = await updateBlob({
-      buffer: userImageBuffer,
-      folderName: "usersprofileimage",
-      fileName: createdUser._id,
-    })
-
-    createdUser.pictureUrl = `${config.blobsBaseUrl}/${blobName}`
-    await createdUser.save()
+  if (!person) {
+    res
+      .status(403)
+      .json({ ok: false, message: "No existe un usuario con ese correo" })
   } else {
-    user.loginCode = randomCode
-    await user.save()
+    person.loginCode = randomCode
+    await person.save()
   }
 
   try {
-    await sendEmail(
+    const result = await sendEmail(
       emailLower,
       `Código para ingresar: ${randomCode}`,
       `
@@ -141,18 +91,11 @@ const codeGenerator = async (req, res) => {
             </body>
           </html>
     
-          `
+      `
     )
     res.status(200).json({ ok: true })
   } catch (error) {
     console.log({ error })
-    logger.error("error al enviar código", {
-      err: error,
-      path: req?.originalUrl,
-      body: req?.body,
-      params: req?.params,
-      query: req?.query,
-    })
   }
 }
 
@@ -175,5 +118,4 @@ const localCallback = async (req, res) => {
 module.exports = {
   localCallback,
   codeGenerator,
-  codeVerification,
 }

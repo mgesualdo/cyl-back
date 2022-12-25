@@ -5,6 +5,7 @@ const { localCallback } = require("./controllers/auth")
 const connectToDB = require("./db/index")
 const cors = require("cors")
 const { areWeInProduction } = require("./utils/config")
+const authRouter = require("./routes/auth")
 require("./middlewares/passport")
 
 const app = express()
@@ -16,7 +17,7 @@ app.use(
   cors({
     origin: [
       "https://cyl-front-three.vercel.app",
-      "https://cyl-front-git-dev-mgesualdo.vercel.app/",
+      "https://cyl-front-git-dev-mgesualdo.vercel.app",
       "http://localhost:3000",
     ],
     credentials: true,
@@ -37,19 +38,11 @@ app.use(
 app.use(passport.initialize())
 // app.use(passport.session())
 
+app.use("/auth", authRouter)
+
 app.get("/health-check", (_, res) => {
   res.status(200).send("I'm alive, don't replace me! 🙏")
 })
-app.get("/", passport.authenticate("jwt"), (req, res) => {
-  console.log("LLEGA ACA")
-  res.status(200).send("Nuestra app ya está en producción")
-})
-
-app.post(
-  "/login",
-  passport.authenticate("local", { session: false }),
-  localCallback
-)
 
 const PORT = process.env.PORT || 4000
 

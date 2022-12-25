@@ -43,14 +43,15 @@ passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password",
+      passwordField: "code",
     },
-    function (email, _, done) {
+    function (email, code, done) {
       console.log({ email })
-      Person.findOne({ email }, function (err, person) {
+      Person.findOne({ email, loginCode: code }, function (err, person) {
         if (err) return done(err)
 
-        if (!person) return done(null, false, { message: "Email incorrecto." })
+        if (!person)
+          return done(null, false, { message: "Email o código incorrectos." })
 
         return done(null, person)
       })

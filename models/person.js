@@ -32,6 +32,7 @@ const PersonSchema = new mongoose.Schema(
         number: String,
       },
     ],
+    loginCode: { type: String, maxLength: 6 },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Person",
