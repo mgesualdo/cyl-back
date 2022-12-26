@@ -1,18 +1,28 @@
 require("dotenv").config()
 const express = require("express")
 const passport = require("passport")
-const { localCallback } = require("./controllers/auth")
 const connectToDB = require("./db/index")
 const cors = require("cors")
 const { areWeInProduction } = require("./utils/config")
+
+// Importación de ROUTERS
 const authRouter = require("./routes/auth")
+const cashflowRouter = require("./routes/cashflow")
+const eventRouter = require("./routes/event")
+const personRouter = require("./routes/person")
+const productRouter = require("./routes/product")
+const walletRouter = require("./routes/wallet")
+
 require("./middlewares/passport")
 
 const app = express()
 
+// Conexión con la base de datos de Mongo
 connectToDB()
 
 app.use(express.json())
+
+//Configuración CORS
 app.use(
   cors({
     origin: [
@@ -38,7 +48,13 @@ app.use(
 app.use(passport.initialize())
 // app.use(passport.session())
 
+// Configuración de nuestras RUTAS con los ROUTERS que importamos
 app.use("/auth", authRouter)
+app.use("/cashflows", cashflowRouter)
+app.use("/events", eventRouter)
+app.use("/persons", personRouter)
+app.use("/products", productRouter)
+app.use("/wallets", walletRouter)
 
 app.get("/health-check", (_, res) => {
   res.status(200).send("I'm alive, don't replace me! 🙏")

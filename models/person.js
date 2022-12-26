@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const { ObjectId } = mongoose.Schema.Types
 
 const PersonSchema = new mongoose.Schema(
   {
@@ -10,7 +11,7 @@ const PersonSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    fullname: {
+    denomination: {
       type: String,
       trim: true,
     },
@@ -32,9 +33,12 @@ const PersonSchema = new mongoose.Schema(
         number: String,
       },
     ],
+    isClient: { type: Boolean, default: false },
+    isSupplier: { type: Boolean, default: false },
+    isEmployee: { type: Boolean, default: false },
     loginCode: { type: String, maxLength: 6 },
     createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: "Person",
     },
   },
