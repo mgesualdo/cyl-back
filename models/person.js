@@ -33,6 +33,7 @@ const PersonSchema = new mongoose.Schema(
         number: String,
       },
     ],
+    type: String,
     isClient: { type: Boolean, default: false },
     isSupplier: { type: Boolean, default: false },
     isEmployee: { type: Boolean, default: false },

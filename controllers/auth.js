@@ -14,7 +14,15 @@ const codeGenerator = async (req, res) => {
   const emailLower = email.toLowerCase()
 
   if (!isValidEmail) {
-    res.status(400).json({ ok: false })
+    res.status(400).json({
+      ok: false,
+      swalConfig: {
+        title: "UPS",
+        html: "El correo electrónico no es válido, revísalo por favor",
+        icon: "info",
+        confirmButtonText: "Entendido 😣",
+      },
+    })
     return
   }
 
@@ -93,7 +101,15 @@ const codeGenerator = async (req, res) => {
     
       `
     )
-    res.status(200).json({ ok: true })
+    res.status(200).json({
+      ok: true,
+      swalConfig: {
+        title: "Listo",
+        html: "Ingresa el código que acabamos de enviarte a tu correo electrónico",
+        icon: "success",
+        confirmButtonText: "Entendido 🧐",
+      },
+    })
   } catch (error) {
     console.log({ error })
   }
@@ -112,7 +128,11 @@ const localCallback = async (req, res) => {
     sameSite: areWeInProduction ? "None" : "strict",
   })
 
-  res.status(200).json({ ok: true, data: token })
+  res.status(200).json({
+    ok: true,
+    data: token,
+    redirect: "/",
+  })
 }
 
 module.exports = {
