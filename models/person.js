@@ -15,18 +15,13 @@ const PersonSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    dob: {
-      type: Date,
+    email: {
+      type: String,
+      minlength: 5,
+      unique: true,
+      lowercase: true,
+      required: true,
     },
-    emails: [
-      {
-        type: String,
-        minlength: 5,
-        unique: true,
-        lowercase: true,
-        required: true,
-      },
-    ],
     phones: [
       {
         kind: String,
@@ -34,10 +29,16 @@ const PersonSchema = new mongoose.Schema(
       },
     ],
     type: String,
+    areas: [String],
     isClient: { type: Boolean, default: false },
     isSupplier: { type: Boolean, default: false },
     isEmployee: { type: Boolean, default: false },
     loginCode: { type: String, maxLength: 6 },
+    annulled: { type: Boolean, default: false },
+    annulledBy: {
+      type: ObjectId,
+      ref: "Person",
+    },
     createdBy: {
       type: ObjectId,
       ref: "Person",

@@ -5,13 +5,11 @@ const Person = require("../models/person")
 const { jwtSecretKey } = require("../utils/config")
 
 const cookieExtractor = (req) => {
-  console.log("COOKIES", { cookies: req.headers })
   let token = null
   if (req && req.headers.cookie) {
     token = req.headers.cookie.split("jwt=")[1]
     token = token?.includes(";") ? token.split(";")[0] : token
   }
-  console.log({ token })
 
   return token
 }
@@ -56,14 +54,13 @@ passport.use(
 )
 
 passport.serializeUser(function (person, done) {
-  console.log("SERIALIZE", person)
   done(null, person._id)
 })
 
 passport.deserializeUser(function (id, done) {
   // Se ejecuta con cada request que llega, para ver si tiene una SESSION
   // extrae el id de la persona y la pasa
-  console.log("DE-SERIALIZE", id)
+
   Person.findById(id, function (err, person) {
     done(err, person)
   })
