@@ -6,13 +6,14 @@ const {
   editPerson,
   annulPerson,
 } = require("../controllers/person")
+const { parseFile } = require("../middlewares/multer")
 
 const router = Router()
 
 router.use(passport.authenticate("jwt"))
 
 router.get("/", getPersons)
-router.post("/", createPerson)
+router.post("/", parseFile, createPerson)
 router.put("/:id", editPerson)
 router.delete("/:id", annulPerson)
 

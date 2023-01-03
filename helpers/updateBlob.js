@@ -32,6 +32,4 @@ const updateBlob = async ({
   return blobName
 }
 
-module.exports = {
-  updateBlob,
-}
+module.exports = updateBlob

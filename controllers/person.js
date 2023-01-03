@@ -1,14 +1,29 @@
 const Person = require("../models/person")
+const updateBlob = require("../helpers/updateBlob")
 
 const getPersons = async (req, res) => {
   const persons = await Person.find({ annulled: false })
   res.status(200).json({ ok: true, data: persons })
 }
 const createPerson = async (req, res) => {
+  console.log({ files: req.files, file: req.file, body: req.body })
+  const personInfo = JSON.parse(req.body.person)
+
   const createdPerson = await Person.create({
-    ...req.body,
+    ...personInfo,
     createdBy: req.user._id,
   })
+
+  if (req.file) {
+    const blobName = await updateBlob({
+      buffer: req.file.buffer,
+      fileName: `${createdPerson._id}`,
+      containerName: "persons",
+    })
+    createdPerson.imageUrl = `https://cyl.blob.core.windows.net/persons/${blobName}`
+    await createdPerson.save()
+  }
+
   res.status(201).json({
     ok: true,
     swalConfig: {
@@ -23,7 +38,7 @@ const createPerson = async (req, res) => {
 }
 const editPerson = async (req, res) => {
   const { id } = req.params
-  console.log("EDITANDO")
+
   await Person.findByIdAndUpdate(id, req.body)
   res.status(200).json({
     ok: true,

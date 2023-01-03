@@ -15,6 +15,7 @@ const PersonSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    imageUrl: String,
     email: {
       type: String,
       minlength: 5,
