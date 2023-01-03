@@ -38,8 +38,20 @@ const createPerson = async (req, res) => {
 }
 const editPerson = async (req, res) => {
   const { id } = req.params
+  const personInfo = JSON.parse(req.body.person)
 
-  await Person.findByIdAndUpdate(id, req.body)
+  const updatedPerson = await Person.findByIdAndUpdate(id, personInfo)
+
+  if (req.file) {
+    const blobName = await updateBlob({
+      buffer: req.file.buffer,
+      fileName: `${updatedPerson._id}`,
+      containerName: "persons",
+    })
+    updatedPerson.imageUrl = `https://cyl.blob.core.windows.net/persons/${blobName}`
+    await updatedPerson.save()
+  }
+
   res.status(200).json({
     ok: true,
     swalConfig: {
