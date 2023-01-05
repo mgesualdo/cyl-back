@@ -1,19 +1,20 @@
-const passport = require("passport")
-const { Router } = require("express")
+const passport = require('passport')
+const { Router } = require('express')
 const {
   getProducts,
   createProduct,
   editProduct,
   annulProduct,
-} = require("../controllers/product")
+} = require('../controllers/product')
+const { parseFile } = require('../middlewares/multer')
 
 const router = Router()
 
-router.use(passport.authenticate("jwt"))
+router.use(passport.authenticate('jwt'))
 
-router.get("/", getProducts)
-router.post("/", createProduct)
-router.put("/:id", editProduct)
-router.delete("/:id", annulProduct)
+router.get('/', getProducts)
+router.post('/', parseFile, createProduct)
+router.put('/:id', parseFile, editProduct)
+router.delete('/:id', annulProduct)
 
 module.exports = router
