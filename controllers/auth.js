@@ -4,12 +4,14 @@ const Person = require("../models/person")
 const sendEmail = require("../helpers/mailer")
 
 const codeGenerator = async (req, res) => {
-  const { email } = req.params
+  const { email } = req.body
 
   const isValidEmail =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
       email
     )
+
+  console.log({ email })
 
   const emailLower = email.toLowerCase()
 
@@ -39,9 +41,16 @@ const codeGenerator = async (req, res) => {
   const person = await Person.findOne({ email: emailLower })
 
   if (!person) {
-    res
-      .status(403)
-      .json({ ok: false, message: "No existe un usuario con ese correo" })
+    return res.status(403).json({
+      ok: false,
+      message: "No existe un usuario con ese correo",
+      swalConfig: {
+        title: "UPS",
+        html: "No existe un usuario con ese correo",
+        icon: "info",
+        confirmButtonText: "Entendido 😣",
+      },
+    })
   } else {
     person.loginCode = randomCode
     await person.save()
